@@ -1,17 +1,18 @@
 import "./App.css";
-import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import Charts from "./components/Charts";
+import Orders from "./components/Orders";
+import { Route, Link, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <Router>
-      <Sidebar/>
+    <>
       <Routes>
-        <Route exact path="/dashboard" element={<Dashboard/>}/>
+        <Route exact path="/charts" element={<Charts />} />
+        <Route exact path="/orders" element={<Orders />} />
+        <Route exact path="/" element={<Dashboard />} />
       </Routes>
-      <footer>hello</footer>
-    </Router>
+    </>
   );
 }
 
