@@ -36,7 +36,6 @@ export default function Dashboard() {
               <Charts />
             </Paper>
           </Grid>
-          {/* Recent Deposits */}
           <Grid item xs={7} sx={{display: 'flex', gap:2}}>
             <Paper
               sx={{
@@ -62,9 +61,8 @@ export default function Dashboard() {
                 width: 190
               }}
             >
-              <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography>
-              {/* <Deposits /> */}
+              {/* <Title>Total Inspections</Title>
+              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography> */}
             </Paper>
             <Paper
               sx={{
@@ -76,9 +74,8 @@ export default function Dashboard() {
                 width: 190
               }}
             >
-              <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography>
-              {/* <Deposits /> */}
+              {/* <Title>Total Inspections</Title> */}
+              {/* <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography> */}
             </Paper>
           </Grid>
           {/* Recent Inspection */}

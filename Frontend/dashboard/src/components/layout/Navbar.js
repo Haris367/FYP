@@ -16,7 +16,7 @@ import {
   Notifications as NotificationsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { mainListItems, secondaryListItems } from "./ListItems";
+import { mainListItems } from "./ListItems";
 
 const drawerWidth = 240;
 // const style = {  
@@ -136,8 +136,8 @@ export default function Navbar() {
         <Divider />
         <List component="nav">
           {mainListItems}
-          <Divider sx={{ my: 2 }} />
-          {secondaryListItems}
+          {/* <Divider sx={{ my: 2 }} />
+          {secondaryListItems} */}
         </List>
       </Drawer>
     </>
