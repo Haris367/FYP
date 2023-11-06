@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const data = [
-  { username: "user1", password: "password1" },
+  { username: "user1@gmail.com", password: "password1" },
   { username: "user2", password: "password2" },
   // Add more users as needed
 ];
@@ -43,6 +43,13 @@ export default function Login() {
     });
   };
   let navigate = useNavigate();
+
+  const isEmailValid = (email) => {
+    // Check if the email contains "@" and ends with ".com"
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleLogin = () => {
     setError("");
     if (!username || !password) {
@@ -61,6 +68,13 @@ export default function Login() {
       setError("Please fill in both the username and password fields.");
       return;
     }
+
+    if (!isEmailValid(username)) {
+      setIsUsernameInvalid(true);
+      setError("Invalid email format. Please enter a valid email address.");
+      return;
+    }
+
     const user = data.find(
       (user) => user.username === username && user.password === password
     );
@@ -116,7 +130,7 @@ export default function Login() {
               autoFocus
               onChange={(e) => setUsername(e.target.value)}
               error={isUsernameInvalid} // Use the 'error' prop
-              helperText={isUsernameInvalid ? "This field is required" : ""}
+              // helperText={isUsernameInvalid ? "This field is required" : ""}
             />
             <TextField
               margin="normal"
@@ -129,7 +143,7 @@ export default function Login() {
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
               error={isPasswordInvalid} // Use the 'error' prop
-              helperText={isPasswordInvalid ? "This field is required" : ""}
+              // helperText={isPasswordInvalid ? "This field is required" : ""}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -150,7 +164,7 @@ export default function Login() {
               Login
             </Button>
             {error && (
-              <p style={{ color: "red", marginLeft: "60px" }}>{error}</p>
+              <p style={{ color: "red", marginLeft: "60px", fontSize: "15px"}}>{error}</p>
             )}
             <Grid container>
               <Grid item xs>

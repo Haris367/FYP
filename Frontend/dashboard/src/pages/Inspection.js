@@ -100,13 +100,13 @@ export default function Inspection({ showAll = true }) {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Inspection Id</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Ad Id</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Date</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Inspector Name</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>IMEI</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Model Name</TableCell>
-              <TableCell className="tableHeaderCell" style={tableStyles}>Status</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Inspection Id</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Ad Id</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Date</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Inspector Name</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">IMEI</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Model Name</TableCell>
+              <TableCell  style={tableStyles} className="tableHeaderCell">Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
