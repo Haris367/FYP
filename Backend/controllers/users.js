@@ -11,8 +11,8 @@ const userDetails = async (req, res) => {
 
 // authenticate user
 const login = async (req, res) => {
-  const { username, password } = req.body;
-  const user = await Users.findOne({ where: { username } });
+  const { email, password } = req.body;
+  const user = await Users.findOne({ where: { email } });
 
   if (!user) {
     return res.status(404).send({ message: "User not found" });
@@ -21,7 +21,7 @@ const login = async (req, res) => {
   const isMatch = await comparePasswords(password, user.password);
   if (isMatch) {
     const token = jwt.sign({ userId: user.userId }, process.env.JWT_KEY, {
-      expiresIn: "7d",
+      expiresIn: "7y",
     });
     const { password, ...userDetails } = user.dataValues;
     return res.status(200).send({ user: userDetails, token });
@@ -32,14 +32,14 @@ const login = async (req, res) => {
 
 // create new user
 const signup = async (req, res) => {
-  const { username, password } = req.body;
-  const user = await Users.findOne({ where: { username } });
+  const { email, password } = req.body;
+  const user = await Users.findOne({ where: { email } });
 
   if (user) {
     return res.status(409).send({ message: "User already exist" });
   }
 
-  await Users.create({ username, password });
+  await Users.create({ email, password });
   res.status(201).send({ message: "Account created successfully" });
 };
 
