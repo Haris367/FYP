@@ -19,26 +19,51 @@ import {
 import { mainListItems } from "./ListItems";
 
 const drawerWidth = 240;
-// const style = {  
+// const style = {
 //   background: '#ed2b3b'
 // };
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  // position: 'sticky',
+  top: 0,
   zIndex: theme.zIndex.drawer + 1,
+  overflow: 'hidden', // Prevent scrolling on the AppBar itself
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
+    backdropFilter: open ? 'blur(8px)' : 'none',
+    transition: theme.transitions.create("backdrop-filter", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+
+    '&::before': {
+      backdropFilter: 'blur(8px)',
+      transition: theme.transitions.create("backdrop-filter", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
   }),
 }));
+
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -66,7 +91,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -75,7 +99,7 @@ export default function Navbar() {
 
   return (
     <>
-      <AppBar position="absolute" open={open} sx={{ bgcolor: "#2ecc71" }}>
+      <AppBar position="absolute" open={open} sx={{ bgcolor: "#FF5A60" }}>
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
@@ -103,7 +127,7 @@ export default function Navbar() {
             Dashboard
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>

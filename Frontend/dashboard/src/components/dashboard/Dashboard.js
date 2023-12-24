@@ -48,7 +48,7 @@ export default function Dashboard() {
               }}
             >
               <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography>
+              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#FF5A60"}}>{totalCount}</Typography>
               {/* <Deposits /> */}
             </Paper>
             <Paper

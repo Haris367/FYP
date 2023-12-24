@@ -7,13 +7,15 @@ import {
   
 } from "@mui/material";
 import {
-  Dashboard as DashboardIcon,
+  // Dashboard as DashboardIcon,
+  // DashboardOutlinedIcon as DashboardIcon,
   AppSettingsAltTwoTone as InspectionIcon,
   SellTwoTone as SellItForMeIcon,
   BarChart as BarChartIcon,
   Layers as LayersIcon,
   Assignment as AssignmentIcon
 } from "@mui/icons-material";
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 
 import { Link } from "react-router-dom";
 // import Charts from "./Charts";
@@ -21,7 +23,7 @@ export const mainListItems = (
   <React.Fragment>
     <ListItemButton component={Link} to="/dashboard">
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardOutlinedIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>

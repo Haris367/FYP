@@ -21,3 +21,6 @@
   .rowStatusPending {
     color: red;
   }
+  TableCell{
+    textAlign: "center",
+  }

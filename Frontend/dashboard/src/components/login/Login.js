@@ -1,5 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { loginSchema } from "../../validations/LoginValidations";
+import ShowIcon from "@mui/icons-material/Visibility";
+import HideIcon from "@mui/icons-material/VisibilityOff";
+// import * as Yup from 'yup';
 import {
   Avatar,
   Button,
@@ -10,84 +16,60 @@ import {
   Link,
   Grid,
   Box,
+  InputAdornment,
 } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { login } from "../../services";
 // import Dashboard from "./Dashboard";
-import { useNavigate } from "react-router-dom";
 import "./login.css";
 
-const data = [
-  { username: "user1@gmail.com", password: "password1" },
-  { username: "user2", password: "password2" },
-  // Add more users as needed
-];
+// const data = [
+//   { username: "user1@gmail.com", password: "password1" },
+//   { username: "user2", password: "password2" },
+//   // Add more users as needed
+// ];
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const { values, errors, handleBlur, touched, handleSubmit, handleChange } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: loginSchema,
+      onSubmit: async (values) => {
+        // handleLogin(values);
+        try {
+          const { email: username, password } = values;
+          const payload = { username, password };
+          const response = await login(payload);
+          const { user, token } = response.data;
+          localStorage.setItem("token", token);
+          // store the user info in redux
+
+          // navigate("/dashboard");
+        } catch (e) {
+          console.log(e?.response?.data || e.response?.data?.message);
+          if (e.response?.status === 401) {
+            errors.email = "Invalid email or password";
+            errors.password = "Invalid email or password";
+          }
+        }
+      },
     });
-  };
-  let navigate = useNavigate();
 
-  const isEmailValid = (email) => {
-    // Check if the email contains "@" and ends with ".com"
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleLogin = () => {
-    setError("");
-    if (!username || !password) {
-      if (!username) {
-        setIsUsernameInvalid(true);
-      } else {
-        setIsUsernameInvalid(false);
-      }
-
-      if (!password) {
-        setIsPasswordInvalid(true);
-      } else {
-        setIsPasswordInvalid(false);
-      }
-
-      setError("Please fill in both the username and password fields.");
-      return;
-    }
-
-    if (!isEmailValid(username)) {
-      setIsUsernameInvalid(true);
-      setError("Invalid email format. Please enter a valid email address.");
-      return;
-    }
-
-    const user = data.find(
-      (user) => user.username === username && user.password === password
-    );
-    if (user) {
-      // Successful login
-      navigate("/dashboard");
-    } else {
-      // Failed login
-      setIsUsernameInvalid(true);
-      setIsPasswordInvalid(true);
-      setError("Invalid credentials. Please try again.");
-    }
-  };
+  // const handleLogin = async (values) => {
+  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -128,9 +110,12 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
-              onChange={(e) => setUsername(e.target.value)}
-              error={isUsernameInvalid} // Use the 'error' prop
-              // helperText={isUsernameInvalid ? "This field is required" : ""}
+              values={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              helperText={(touched.email && errors.email) || ""}
+              // onChange={(e) => setUsername(e.target.value)}
+              // error={isUsernameInvalid} // Use the 'error' prop
             />
             <TextField
               margin="normal"
@@ -138,11 +123,32 @@ export default function Login() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-              error={isPasswordInvalid} // Use the 'error' prop
+              values={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              helperText={(touched.password && errors.password) || ""}
+              InputProps={{
+                disableUnderline: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box
+                      sx={{ height: 25, width: 25, cursor: "pointer" }}
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? (
+                        <ShowIcon sx={{ color: "#57eb95" }} />
+                      ) : (
+                        <HideIcon sx={{ color: "black" }} />
+                      )}
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
+              // onChange={(e) => setPassword(e.target.value)}
+              // error={isPasswordInvalid} // Use the 'error' prop
               // helperText={isPasswordInvalid ? "This field is required" : ""}
             />
             {/* <FormControlLabel
@@ -150,7 +156,7 @@ export default function Login() {
               label="Remember me"
             /> */}
             <Button
-              onClick={handleLogin}
+              // onClick={handleLogin}
               type="submit"
               fullWidth
               variant="contained"
@@ -163,16 +169,16 @@ export default function Login() {
             >
               Login
             </Button>
-            {error && (
-              <p style={{ color: "red", marginLeft: "60px", fontSize: "15px"}}>{error}</p>
-            )}
-            <Grid container>
+            {/* {errors && (
+              <p style={{ color: "red", marginLeft: "60px", fontSize: "15px"}}>{errors}</p>
+            )} */}
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2" style={{ marginLeft: "176px" }}>
                   Forgot password?
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Box>
       </Container>
