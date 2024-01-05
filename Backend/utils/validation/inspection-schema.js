@@ -7,4 +7,4 @@ const inspectionRequestSchema = Joi.object({
   status: Joi.boolean().required()
 });
 
-module.exports = inspectionRequestSchema;
+module.exports = {inspectionRequestSchema};

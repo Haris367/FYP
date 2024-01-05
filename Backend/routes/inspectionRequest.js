@@ -26,6 +26,6 @@ router.post("/", validateToken, validateRequest(inspectionRequestSchema), saveIn
 
 router.delete("/:id", validateToken, deleteinspectionRequestById);
 
-router.patch("/:id", validateToken,validateRequest(inspectionRequestSchema), updateInspectionRequest)
-
+router.patch("/:id", validateToken,validateRequest(inspectionRequestSchema), updateInspectionRequest) 
+//to do: update request schema to be made and replaced here.
 module.exports = router;
