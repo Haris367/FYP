@@ -1,11 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useFormik } from "formik";
+
 import { loginSchema } from "../../validations/LoginValidations";
+
 import ShowIcon from "@mui/icons-material/Visibility";
 import HideIcon from "@mui/icons-material/VisibilityOff";
-// import * as Yup from 'yup';
+
+
 import {
   Avatar,
   Button,
@@ -13,8 +16,6 @@ import {
   Container,
   TextField,
   Typography,
-  Link,
-  Grid,
   Box,
   InputAdornment,
 } from "@mui/material";
@@ -24,13 +25,6 @@ import { login } from "../../services";
 // import Dashboard from "./Dashboard";
 import "./login.css";
 
-// const data = [
-//   { username: "user1@gmail.com", password: "password1" },
-//   { username: "user2", password: "password2" },
-//   // Add more users as needed
-// ];
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -38,38 +32,37 @@ export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const { values, errors, handleBlur, touched, handleSubmit, handleChange } =
+  const formik =
     useFormik({
       initialValues: initialValues,
       validationSchema: loginSchema,
       onSubmit: async (values) => {
-        // handleLogin(values);
+        // loginHandler(values);
         try {
-          const { email: username, password } = values;
-          const payload = { username, password };
+          const { email, password } = values;
+          const payload = { email, password };
           const response = await login(payload);
           const { user, token } = response.data;
           localStorage.setItem("token", token);
           // store the user info in redux
-
-          // navigate("/dashboard");
+          console.log(response.data)
+          navigate("/dashboard");
         } catch (e) {
           console.log(e?.response?.data || e.response?.data?.message);
           if (e.response?.status === 401) {
-            errors.email = "Invalid email or password";
-            errors.password = "Invalid email or password";
+            formik.errors.email = "Invalid email or password";
+            formik.errors.password = "Invalid email or password";
           }
         }
       },
     });
 
-  // const handleLogin = async (values) => {
-  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -77,19 +70,20 @@ export default function Login() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: "88px",
-            marginRight: "10px",
+            marginTop: "70px",
+            marginLeft:"-20px",
             display: "flex",
-            height: 500,
+            height: 450,
             width: 500,
             flexDirection: "column",
             alignItems: "center",
-            border: "5px solid #d9fae7",
             padding: "15px",
-            boxShadow: 10,
+            boxShadow: 8,
+            borderRadius: 10,
+            borderTop: '4px solid #f0999c',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "#2ecc71" }}>
+          <Avatar sx={{ m: 1, bgcolor: "#FF5A60" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -97,7 +91,7 @@ export default function Login() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -110,10 +104,12 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
-              values={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              helperText={(touched.email && errors.email) || ""}
+              values={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={formik.touched.email && formik.errors.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              InputProps={{ disableUnderline: true }}
               // onChange={(e) => setUsername(e.target.value)}
               // error={isUsernameInvalid} // Use the 'error' prop
             />
@@ -126,10 +122,11 @@ export default function Login() {
               type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
-              values={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              helperText={(touched.password && errors.password) || ""}
+              values={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={formik.touched.password && formik.errors.password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
               InputProps={{
                 disableUnderline: true,
                 endAdornment: (
@@ -139,7 +136,7 @@ export default function Login() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <ShowIcon sx={{ color: "#57eb95" }} />
+                        <ShowIcon sx={{ color: "#FF5A60" }} />
                       ) : (
                         <HideIcon sx={{ color: "black" }} />
                       )}
@@ -156,15 +153,15 @@ export default function Login() {
               label="Remember me"
             /> */}
             <Button
-              // onClick={handleLogin}
+              // onClick={loginHandler}
               type="submit"
               fullWidth
               variant="contained"
               sx={{
                 mt: 3,
                 mb: 2,
-                background: "#2ecc71",
-                "&:hover": { bgcolor: "#57eb95" },
+                background: "#FF5A60",
+                "&:hover": { bgcolor: "#fc7c80" },
               }}
             >
               Login

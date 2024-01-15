@@ -3,6 +3,7 @@ import Dashboard from "../dashboard/Dashboard";
 import Charts from "../dashboard/chart/Charts";
 import Inspection from "../../pages/Inspection";
 import SellRequests from "../../pages/SellRequests";
+import NotFound from "../../pages/NotFound";
 // import Navbar from "./components/Navbar";
 import Login from "../login/Login";
 import Layout from "../layout/Layout";
@@ -18,7 +19,7 @@ export default function Routing() {
           <Route exact path="/charts" element={<Charts />} />
           <Route exact path="/inspection" element={<Inspection />} />
           <Route exact path="/requests" element={<SellRequests/>} />
-          {/* <Route exact path="/nav" element={<Navbar />} /> */}
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </Layout>
     </Router>

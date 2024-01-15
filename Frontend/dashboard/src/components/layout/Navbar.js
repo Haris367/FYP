@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useDispatch} from 'react-redux';
+
 import { styled } from "@mui/material/styles";
 import {
   CssBaseline,
@@ -9,14 +11,15 @@ import {
   Typography,
   Divider,
   IconButton,
-  Badge,
 } from "@mui/material";
 import {
+  Logout as LogoutIcon,
   Menu as MenuIcon,
-  Notifications as NotificationsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
 import { mainListItems } from "./ListItems";
+import userSlice, { userActions } from "../../store/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 // const style = {
@@ -28,17 +31,17 @@ const AppBar = styled(MuiAppBar, {
   // position: 'sticky',
   top: 0,
   zIndex: theme.zIndex.drawer + 1,
-  overflow: 'hidden', // Prevent scrolling on the AppBar itself
+  overflow: "hidden", // Prevent scrolling on the AppBar itself
 
-  '&::before': {
+  "&::before": {
     content: '""',
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     zIndex: -1,
-    backdropFilter: open ? 'blur(8px)' : 'none',
+    backdropFilter: open ? "blur(8px)" : "none",
     transition: theme.transitions.create("backdrop-filter", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -54,8 +57,8 @@ const AppBar = styled(MuiAppBar, {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
 
-    '&::before': {
-      backdropFilter: 'blur(8px)',
+    "&::before": {
+      backdropFilter: "blur(8px)",
       transition: theme.transitions.create("backdrop-filter", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -63,7 +66,6 @@ const AppBar = styled(MuiAppBar, {
     },
   }),
 }));
-
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -92,9 +94,18 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Navbar() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const logoutHandler = async () => {
+    localStorage.removeItem('token');
+    navigate('/');
+    // dispatch = (userActions.logout());
   };
 
   return (
@@ -126,10 +137,9 @@ export default function Navbar() {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={1} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+          <IconButton color="inherit" onClick={logoutHandler}>
+            <Typography>Logout</Typography>
+            <LogoutIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

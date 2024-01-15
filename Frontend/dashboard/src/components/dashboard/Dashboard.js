@@ -1,10 +1,17 @@
 import * as React from "react";
-import { Box, Toolbar, Container, Grid, Paper ,Typography} from "@mui/material";
+import {
+  Box,
+  Toolbar,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
 import Charts from "./chart/Charts";
 import Inspection from "../../pages/Inspection";
 import Title from "../../styles/Title";
 import { Link } from "react-router-dom";
-import {totalCount} from "../../pages/Inspection";
+import { totalCount } from "../../pages/Inspection";
 
 export default function Dashboard() {
   return (
@@ -36,29 +43,38 @@ export default function Dashboard() {
               <Charts />
             </Paper>
           </Grid>
-          <Grid item xs={7} sx={{display: 'flex', gap:2}}>
+          <Grid item xs={7} sx={{ display: "flex", gap: 2 }}>
             <Paper
               sx={{
-                pt:4,
-                pl:2,
+                pt: 4,
+                pl: 2,
                 display: "flex",
                 flexDirection: "column",
                 height: 150,
-                width: 190
+                width: 190,
               }}
             >
               <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#FF5A60"}}>{totalCount}</Typography>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "medium",
+                  fontSize: 25,
+                  color: "#FF5A60",
+                }}
+              >
+                {totalCount}
+              </Typography>
               {/* <Deposits /> */}
             </Paper>
             <Paper
               sx={{
-                pt:4,
-                pl:2,
+                pt: 4,
+                pl: 2,
                 display: "flex",
                 flexDirection: "column",
                 height: 150,
-                width: 190
+                width: 190,
               }}
             >
               {/* <Title>Total Inspections</Title>
@@ -66,12 +82,12 @@ export default function Dashboard() {
             </Paper>
             <Paper
               sx={{
-                pt:4,
-                pl:2,
+                pt: 4,
+                pl: 2,
                 display: "flex",
                 flexDirection: "column",
                 height: 150,
-                width: 190
+                width: 190,
               }}
             >
               {/* <Title>Total Inspections</Title> */}
