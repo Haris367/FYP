@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDispatch} from 'react-redux';
+import { useDispatch } from "react-redux";
 
 import { styled } from "@mui/material/styles";
 import {
@@ -94,7 +94,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Navbar() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -103,9 +102,9 @@ export default function Navbar() {
   };
 
   const logoutHandler = async () => {
-    localStorage.removeItem('token');
-    navigate('/');
-    // dispatch = (userActions.logout());
+    localStorage.removeItem("token");
+    dispatch(userActions.logout());
+    navigate("/");
   };
 
   return (

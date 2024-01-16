@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Dashboard from "../dashboard/Dashboard";
 import Charts from "../dashboard/chart/Charts";
 import Inspection from "../../pages/Inspection";
@@ -8,6 +8,7 @@ import NotFound from "../../pages/NotFound";
 import Login from "../login/Login";
 import Layout from "../layout/Layout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "../auth-guard/AuthGuard";
 
 export default function Routing() {
   return (
@@ -15,13 +16,44 @@ export default function Routing() {
       <Layout>
         <Routes>
           <Route exact path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/charts" element={<Charts />} />
-          <Route exact path="/inspection" element={<Inspection />} />
-          <Route exact path="/requests" element={<SellRequests/>} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            exact
+            path="/charts"
+            element={
+              <ProtectedRoute>
+                <Charts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            exact
+            path="/inspection"
+            element={
+              <ProtectedRoute>
+                <Inspection />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            exact
+            path="/requests"
+            element={
+              <ProtectedRoute>
+                <SellRequests />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Layout>
     </Router>
-  )
+  );
 }

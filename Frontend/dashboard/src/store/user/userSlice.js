@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser } from "./userActions";
 
 const initialState = {
   id: "",
@@ -12,17 +11,6 @@ const userSlice = createSlice({
   reducers: {
     logout: () => initialState,
     login: (state, action) => (state = action.payload),
-  },
-  extraReducers: (builder) => {
-    builder.addCase(getUser.pending, (state, action) => {
-      state.id = null;
-    });
-    builder.addCase(getUser.rejected, (state, action) => {
-      return initialState;
-    });
-    builder.addCase(getUser.fulfilled, (state, action) => {
-      return action.payload;
-    });
   },
 });
 

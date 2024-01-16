@@ -1,13 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { loginSchema } from "../../validations/LoginValidations";
 
 import ShowIcon from "@mui/icons-material/Visibility";
 import HideIcon from "@mui/icons-material/VisibilityOff";
-
 
 import {
   Avatar,
@@ -24,45 +23,42 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { login } from "../../services";
 // import Dashboard from "./Dashboard";
 import "./login.css";
-
+import { userActions } from "../../store/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
 
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const formik =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: loginSchema,
-      onSubmit: async (values) => {
-        // loginHandler(values);
-        try {
-          const { email, password } = values;
-          const payload = { email, password };
-          const response = await login(payload);
-          const { user, token } = response.data;
-          localStorage.setItem("token", token);
-          // store the user info in redux
-          console.log(response.data)
-          navigate("/dashboard");
-        } catch (e) {
-          console.log(e?.response?.data || e.response?.data?.message);
-          if (e.response?.status === 401) {
-            formik.errors.email = "Invalid email or password";
-            formik.errors.password = "Invalid email or password";
-          }
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      // loginHandler(values);
+      try {
+        const { email, password } = values;
+        const response = await login({ email, password });
+        const { user, token } = response.data;
+        localStorage.setItem("token", token);
+        dispatch(userActions.login({ id: user.userId, email }));
+        navigate("/dashboard");
+      } catch (e) {
+        console.log(e?.response?.data || e.response?.data?.message);
+        if (e.response?.status === 401) {
+          formik.errors.email = "Invalid email or password";
+          formik.errors.password = "Invalid email or password";
         }
-      },
-    });
-
+      }
+    },
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -71,7 +67,7 @@ export default function Login() {
         <Box
           sx={{
             marginTop: "70px",
-            marginLeft:"-20px",
+            marginLeft: "-20px",
             display: "flex",
             height: 450,
             width: 500,
@@ -80,7 +76,7 @@ export default function Login() {
             padding: "15px",
             boxShadow: 8,
             borderRadius: 10,
-            borderTop: '4px solid #f0999c',
+            borderTop: "4px solid #f0999c",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "#FF5A60" }}>

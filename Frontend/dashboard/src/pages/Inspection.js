@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+
 import {
   Table,
   TableBody,
@@ -10,89 +11,33 @@ import {
 } from "@mui/material";
 // import Title from "../styles/Title";
 import "./pages.styles.css";
-// import Navbar from "./Navbar";
 
-// Generate Order Data
-function createData(id, orderId, date, name, modelNum, modelName, status) {
-  return { id, orderId, date, name, modelNum, modelName, status };
-}
+import { getAllInspectionRequests } from "../services/inspection";
 
-const rows = [
-  createData(
-    0,
-    5,
-    "10 Nov, 2024",
-    "Elvis Presley",
-    "MNCN2J/A",
-    "Iphone X",
-    "Pending"
-  ),
-  createData(
-    1,
-    10,
-    "16 Nov, 2024",
-    "Paul McCartney",
-    "MNCN2J/A",
-    "Iphone 8",
-    "Pending"
-  ),
-  createData(
-    2,
-    20,
-    "16 Nov, 2024",
-    "Tom Scholz",
-    "MNCN2J/A",
-    "Iphone X",
-    "Pending"
-  ),
-  createData(
-    3,
-    30,
-    "20 Nov, 2024",
-    "Bruce Springsteen",
-    "MNCN2J/A",
-    "Iphone 7",
-    "Done"
-  ),
-  createData(
-    4,
-    40,
-    "25 Nov, 2024",
-    "Bruce Springsteen",
-    "MNCN2J/A",
-    "Iphone 7",
-    "Done"
-  ),
-  createData(
-    5,
-    50,
-    "25 Nov, 2024",
-    "Bruce Springsteen",
-    "MNCN2J/A",
-    "Iphone 7",
-    "Done"
-  ),
-  createData(
-    6,
-    60,
-    "25 Nov, 2024",
-    "Bruce Springsteen",
-    "MNCN2J/A",
-    "Iphone 7",
-    "Done"
-  ),
-];
-
-// function preventDefault(event) {
-//   event.preventDefault();
-// }
 const tableStyles = {
   textAlign: "center",
 };
-export const totalCount = rows.length;
+// export const totalCount = rows.length;
 export default function Inspection({ showAll = true }) {
+  const [inspection, setInspection] = useState([]);
+
+  const fetchInspectionRequest = useCallback(async () => {
+    try {
+      const response = await getAllInspectionRequests();
+      console.log(response.data);
+      setInspection(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInspectionRequest();
+  }, [fetchInspectionRequest]);
+
   // if showAll false , then display 4 rows else display all
-  const allRows = showAll ? rows : rows.slice(0, 4); // can be better
+  // const allRows = showAll ? rows : inspectio.slice(0, 4); // xcan be better
+
   return (
     <>
       <Box className="pageStyling" component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -101,37 +46,71 @@ export default function Inspection({ showAll = true }) {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Inspection Id</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Ad Id</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Date</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Inspector Name</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">IMEI</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Model Name</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Status</TableCell>
+              <TableCell style={tableStyles} className="tableHeaderCell">
+                Inspection Id
+              </TableCell>
+              <TableCell style={tableStyles} className="tableHeaderCell">
+                Model Name
+              </TableCell>
+              <TableCell style={tableStyles} className="tableHeaderCell">
+                Date
+              </TableCell>
+              <TableCell style={tableStyles} className="tableHeaderCell">
+                IMEI
+              </TableCell>
+              <TableCell style={tableStyles} className="tableHeaderCell">
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {allRows.map((row) => (
-              <TableRow key={row.id} className="rowHighlight">
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.id}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.orderId}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.date}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.name}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.modelNum}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.modelName}</TableCell>
+            {inspection.map((inspection) => (
+              <TableRow key={inspection.id} className="rowHighlight">
                 <TableCell
                   style={{
                     border: "2px solid rgb(170 209 187)",
                     ...tableStyles,
-                    color: row.status === "Done" ? "green" : "red",
                   }}
                 >
-                  {row.status}
+                  {inspection.inspectionId}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "2px solid rgb(170 209 187)",
+                    ...tableStyles,
+                  }}
+                >
+                  {inspection.modelName}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "2px solid rgb(170 209 187)",
+                    ...tableStyles,
+                  }}
+                >
+                  {inspection.Date}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "2px solid rgb(170 209 187)",
+                    ...tableStyles,
+                  }}
+                >
+                  {inspection.IMEI}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "2px solid rgb(170 209 187)",
+                    ...tableStyles,
+                    color: inspection.status === "Done" ? "green" : "red",
+                  }}
+                >
+                  {inspection.status}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-        </Table>        
+        </Table>
       </Box>
     </>
   );
