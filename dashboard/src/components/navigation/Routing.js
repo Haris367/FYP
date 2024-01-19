@@ -9,6 +9,7 @@ import Login from "../login/Login";
 import Layout from "../layout/Layout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "../auth-guard/AuthGuard";
+import ProductListing from "../../pages/ProductListing";
 
 export default function Routing() {
   return (
@@ -39,6 +40,15 @@ export default function Routing() {
             element={
               <ProtectedRoute>
                 <Inspection />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            exact
+            path="/products"
+            element={
+              <ProtectedRoute>
+                <ProductListing />
               </ProtectedRoute>
             }
           />

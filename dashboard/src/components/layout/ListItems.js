@@ -21,30 +21,37 @@ import { Link } from "react-router-dom";
 // import Charts from "./Charts";
 export const mainListItems = (
   <React.Fragment>
+    {/* Dashboard */}
     <ListItemButton component={Link} to="/dashboard">
       <ListItemIcon>
         <DashboardOutlinedIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
+
+    {/* Inspection */}
     <ListItemButton component={Link} to="/inspection">
       <ListItemIcon>
         <InspectionIcon />
       </ListItemIcon>
       <ListItemText primary="Inspection" />
     </ListItemButton>
+
+    {/* Product Listing */}
+    <ListItemButton component={Link} to="/products" >
+      <ListItemIcon>
+        <BarChartIcon />
+      </ListItemIcon>
+      <ListItemText primary="Product Listing" />
+    </ListItemButton>
+
+    {/* Sell for me request */}
     <ListItemButton component={Link} to="/requests">
       <ListItemIcon>
         <SellItForMeIcon />
       </ListItemIcon>
       <ListItemText primary="Sell for me Requests" />
     </ListItemButton>
-    {/* <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton> */}
     {/* <ListItemButton>
       <ListItemIcon>
         <LayersIcon />

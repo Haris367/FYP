@@ -11,7 +11,7 @@ import Charts from "./chart/Charts";
 import Inspection from "../../pages/Inspection";
 import Title from "../../styles/Title";
 import { Link } from "react-router-dom";
-import { totalCount } from "../../pages/Inspection";
+import { getRow } from "../../pages/Inspection";
 
 export default function Dashboard() {
   return (
@@ -90,8 +90,8 @@ export default function Dashboard() {
                 width: 190,
               }}
             >
-              {/* <Title>Total Inspections</Title> */}
-              {/* <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography> */}
+              <Title>Total Inspections</Title>
+              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{}</Typography>
             </Paper>
           </Grid>
           {/* Recent Inspection */}
