@@ -10,8 +10,12 @@ import {
   Paper,
   TablePagination,
   Typography,
+  IconButton,
 } from "@mui/material";
-import { getAllProducts } from "../services/products";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { deleteProductById, getAllProducts } from "../services/products";
 
 function ProductListing() {
   const [productListing, setProductListing] = useState([]);
@@ -41,9 +45,23 @@ function ProductListing() {
     fetchProducts();
   }, [fetchProducts]);
 
+  const handleDelete = async (productId) => {
+    try {
+      // Assuming you have a deleteProductById function in your service
+      await deleteProductById(productId);
+
+      // After deletion, fetch the updated product list
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Toolbar />
+      <Toolbar />
+      <Typography variant="h3">Product Listing</Typography>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -59,12 +77,16 @@ function ProductListing() {
             <TableCell>
               <Typography variant="h6">Price</Typography>
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Typography variant="h6">Quantity</Typography>
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Typography variant="h6">isFeaturedAd</Typography>
             </TableCell>
+            <TableCell align="right">
+              <Typography variant="h6">Delete</Typography>
+            </TableCell>
+            
           </TableRow>
         </TableHead>
         <TableBody>
@@ -74,14 +96,22 @@ function ProductListing() {
                 page * rowsPerPage + rowsPerPage
               )
             : productListing
-          ).map((row) => (
+          ).map((productListing) => (
             <TableRow key={productListing.productId}>
-              <TableCell>{productListing.productId}</TableCell>
-              <TableCell>{productListing.name}</TableCell>
+              <TableCell align="left">{productListing.productId}</TableCell>
+              <TableCell align="left">{productListing.name}</TableCell>
               <TableCell>{productListing.description}</TableCell>
               <TableCell>{productListing.price}</TableCell>
-              <TableCell>{productListing.quantity}</TableCell>
+              <TableCell align="right">{productListing.quantity}</TableCell>
               <TableCell>{productListing.isFeaturedAd}</TableCell>
+              <TableCell align="right">
+                <IconButton
+                  color="secondary"
+                  onClick={() => handleDelete(productListing.productId)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
