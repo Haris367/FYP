@@ -1,0 +1,12 @@
+import api from "./api";
+
+export const getAllSellRequests = () => {
+  return api.get("/sellitForMe/all");
+};
+
+export const saveSellRequest = (payload) => {
+  return api.post("/sellitForMe/:id", payload);
+};
+export const deleteSellRequestById = (SellitForMeID) => {
+  return api.delete(`/sellitForMe/${SellitForMeID}`);
+};

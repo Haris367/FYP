@@ -1,130 +1,159 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Toolbar,
-    Box,
-  } from "@mui/material";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Toolbar,
+  TablePagination,
+  Typography,
+  IconButton,
+  Box,
+  tableCellClasses,
+  styled,
+} from "@mui/material";
 
-import "./pages.styles.css";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function createData(id, orderId, date, name, modelNum, modelName, status) {
-    return { id, orderId, date, name, modelNum, modelName, status };
-}
+import { deleteSellRequestById, getAllSellRequests } from "../services/requsets";
 
-const rows = [
-    createData(
-      0,
-      5,
-      "10 Nov, 2024",
-      "Elvis Presley",
-      "MNCN2J/A",
-      "Iphone X",
-      "Pending"
-    ),
-    createData(
-      1,
-      10,
-      "16 Nov, 2024",
-      "Paul McCartney",
-      "MNCN2J/A",
-      "Iphone 8",
-      "Pending"
-    ),
-    createData(
-      2,
-      20,
-      "16 Nov, 2024",
-      "Tom Scholz",
-      "MNCN2J/A",
-      "Iphone X",
-      "Pending"
-    ),
-    createData(
-      3,
-      30,
-      "20 Nov, 2024",
-      "Bruce Springsteen",
-      "MNCN2J/A",
-      "Iphone 7",
-      "Done"
-    ),
-    createData(
-      4,
-      40,
-      "25 Nov, 2024",
-      "Bruce Springsteen",
-      "MNCN2J/A",
-      "Iphone 7",
-      "Done"
-    ),
-    createData(
-      5,
-      50,
-      "25 Nov, 2024",
-      "Bruce Springsteen",
-      "MNCN2J/A",
-      "Iphone 7",
-      "Done"
-    ),
-    createData(
-      6,
-      60,
-      "25 Nov, 2024",
-      "Bruce Springsteen",
-      "MNCN2J/A",
-      "Iphone 7",
-      "Done"
-    ),
-  ];
 
-const tableStyles = {
-    textAlign: "center",
-};
-export const totalCount = rows.length;
-function SellRequests({showAll = true}) {
-    const allRows = showAll ? rows : rows.slice(0, 4);
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
+function SellRequests() {
+  const [sellRequestt, setSellRequests] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // You can set the number of rows per page
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const fetchRequests = useCallback(async () => {
+    try {
+      const response = await getAllSellRequests();
+      console.log(response.data);
+      setSellRequests(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
+
+  const handleDelete = async (SellitForMeID) => {
+    try {
+      // Assuming you have a deleteProductById function in your service
+      await deleteSellRequestById(SellitForMeID);
+
+      // After deletion, fetch the updated product list
+      fetchRequests();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Box className="pageStyling" component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Inspection Id</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Ad Id</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Date</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Inspector Name</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">IMEI</TableCell>
-              <TableCell  style={tableStyles} className="tableHeaderCell">Model Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {allRows.map((row) => (
-              <TableRow className="rowHighlight">
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.id}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.orderId}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.date}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.name}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.modelNum}</TableCell>
-                <TableCell style={{ border: "2px solid rgb(170 209 187)", ...tableStyles }}>{row.modelName}</TableCell>
-                {/* <TableCell
-                  style={{
-                    border: "2px solid rgb(170 209 187)",
-                    ...tableStyles,
-                    color: row.status === "Done" ? "green" : "red",
-                  }}
+    <Box component='main'>
+      <Toolbar />
+      <Typography variant="h4" ml={10}>Sell For me</Typography>
+      <Toolbar />
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="right">
+              Request Id
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              User Name
+            </StyledTableCell>
+            <StyledTableCell>
+              Phone Number
+            </StyledTableCell>
+            <StyledTableCell>
+              Address
+            </StyledTableCell>
+            <StyledTableCell>
+             Model Name
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Mobile Description
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Inspection Slot
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Inspection Time
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              <Typography variant="button">Delete</Typography>
+            </StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(rowsPerPage > 0
+            ? sellRequestt.slice(
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage
+              )
+            : sellRequestt
+          ).map((sellRequestt) => (
+            <StyledTableRow key={sellRequestt.SellitForMeID}>
+              <StyledTableCell align="right">{sellRequestt.SellitForMeID}</StyledTableCell>
+              <StyledTableCell align="center">{sellRequestt.name}</StyledTableCell>
+              <StyledTableCell>{sellRequestt.phoneNumber}</StyledTableCell>
+              <StyledTableCell>{sellRequestt.Address}</StyledTableCell>
+              <StyledTableCell align="right">{sellRequestt.mobileDescription}</StyledTableCell>
+              <StyledTableCell>{sellRequestt.inspectionSlot}</StyledTableCell>
+              <StyledTableCell align="right">
+                <IconButton
+                  color="secondary"
+                  onClick={() => handleDelete(sellRequestt.SellitForMeID)}
                 >
-                  {row.status}
-                </TableCell> */}
-              </TableRow>
+                  <DeleteIcon />
+                </IconButton>
+              </StyledTableCell>
+            </StyledTableRow>
           ))}
-            </TableBody>
-        </Table>        
-      </Box>
-  )
+        </TableBody>
+      </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]} // Customize the rows per page options
+        component="div"
+        count={sellRequestt.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Box>
+  );
 }
 
-export default SellRequests
+export default SellRequests;

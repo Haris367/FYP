@@ -1,21 +1,44 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
-  TableContainer,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   Toolbar,
-  Paper,
   TablePagination,
   Typography,
   IconButton,
+  Box,
+  tableCellClasses,
+  styled,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { deleteProductById, getAllProducts } from "../services/products";
+// import styled from "@emotion/styled";
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 function ProductListing() {
   const [productListing, setProductListing] = useState([]);
@@ -58,35 +81,36 @@ function ProductListing() {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <Box component='main'>
       <Toolbar />
+      <Typography variant="h4" ml={10}>
+        Product Listing
+      </Typography>
       <Toolbar />
-      <Typography variant="h3">Product Listing</Typography>
-      <Table aria-label="simple table">
+      <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>
-              <Typography variant="h6">Id</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">Name</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">Description</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">Price</Typography>
-            </TableCell>
-            <TableCell align="right">
-              <Typography variant="h6">Quantity</Typography>
-            </TableCell>
-            <TableCell align="right">
-              <Typography variant="h6">isFeaturedAd</Typography>
-            </TableCell>
-            <TableCell align="right">
-              <Typography variant="h6">Delete</Typography>
-            </TableCell>
-            
+            <StyledTableCell align="right">
+              <Typography sx={{font:'bold'}}> Product Id</Typography>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <Typography>Name</Typography>
+            </StyledTableCell>
+            <StyledTableCell>
+              <Typography>Description</Typography>
+            </StyledTableCell>
+            <StyledTableCell>
+              <Typography>Price</Typography>
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              <Typography>Quantity</Typography>
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              <Typography>isFeaturedAd</Typography>
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              <Typography variant="button">Delete</Typography>
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -97,22 +121,22 @@ function ProductListing() {
               )
             : productListing
           ).map((productListing) => (
-            <TableRow key={productListing.productId}>
-              <TableCell align="left">{productListing.productId}</TableCell>
-              <TableCell align="left">{productListing.name}</TableCell>
-              <TableCell>{productListing.description}</TableCell>
-              <TableCell>{productListing.price}</TableCell>
-              <TableCell align="right">{productListing.quantity}</TableCell>
-              <TableCell>{productListing.isFeaturedAd}</TableCell>
-              <TableCell align="right">
+            <StyledTableRow key={productListing.productId}>
+              <StyledTableCell align="right">{productListing.productId}</StyledTableCell>
+              <StyledTableCell align="center">{productListing.name}</StyledTableCell>
+              <StyledTableCell>{productListing.description}</StyledTableCell>
+              <StyledTableCell>{productListing.price}</StyledTableCell>
+              <StyledTableCell align="right">{productListing.quantity}</StyledTableCell>
+              <StyledTableCell>{productListing.isFeaturedAd}</StyledTableCell>
+              <StyledTableCell align="right">
                 <IconButton
                   color="secondary"
                   onClick={() => handleDelete(productListing.productId)}
                 >
                   <DeleteIcon />
                 </IconButton>
-              </TableCell>
-            </TableRow>
+              </StyledTableCell>
+            </StyledTableRow>
           ))}
         </TableBody>
       </Table>
@@ -125,7 +149,7 @@ function ProductListing() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </TableContainer>
+    </Box>
   );
 }
 

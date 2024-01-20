@@ -64,8 +64,9 @@ export default function Inspection({ showAll = true }) {
                   direction={orderBy === "Date" ? order : "asc"}
                   onClick={() => handleSortRequest("Date")}
                 >
-                  Date
+                  Date 
                 </TableSortLabel>
+                {/* date formate: yyyy-mm-dd*/}
               </TableCell>
               <TableCell>Address</TableCell>
               <TableCell>Status</TableCell>
