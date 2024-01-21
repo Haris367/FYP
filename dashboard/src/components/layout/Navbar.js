@@ -102,9 +102,14 @@ export default function Navbar() {
   };
 
   const logoutHandler = async () => {
-    localStorage.removeItem("token");
-    dispatch(userActions.logout());
-    navigate("/");
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (shouldDelete) {
+      localStorage.removeItem("token");
+      dispatch(userActions.logout());
+      navigate("/");
+    }
   };
 
   return (

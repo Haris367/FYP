@@ -153,7 +153,7 @@ export default function Inspection({ showAll = true }) {
       {showAll && (
         <React.Fragment>
           <Toolbar />
-          <Toolbar />
+          <Toolbar>
           <Typography variant="h5">Inspection Request</Typography>
           <div style={{ marginLeft: "auto" }}>
             <Box display="flex" alignItems="center">
@@ -162,20 +162,20 @@ export default function Inspection({ showAll = true }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <IconButton color="secondary" onClick={handleSearch}>
-                <SearchIcon />
+              <IconButton onClick={handleSearch}>
+                <SearchIcon sx={{ fill: "#FF5A60" }}/>
               </IconButton>
             </Box>
           </div>
-          <Toolbar />
+          </Toolbar>
         </React.Fragment>
       )}
       <Table size="small">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Inspection Id</StyledTableCell>
-            <StyledTableCell>Product Id</StyledTableCell>
-            <StyledTableCell sortDirection={orderBy === "Date" ? order : false}>
+            <StyledTableCell align="center">Inspection Id</StyledTableCell>
+            <StyledTableCell align="center">Product Id</StyledTableCell>
+            <StyledTableCell  align="center" sortDirection={orderBy === "Date" ? order : false}>
               <TableSortLabel
                 active={orderBy === "Date"}
                 direction={orderBy === "Date" ? order : "asc"}
@@ -185,8 +185,8 @@ export default function Inspection({ showAll = true }) {
               Date
               {/* date formate: yyyy-mm-dd*/}
             </StyledTableCell>
-            <StyledTableCell>Address</StyledTableCell>
-            <StyledTableCell>Status</StyledTableCell>
+            <StyledTableCell align="center">Address</StyledTableCell>
+            <StyledTableCell align="center">Status</StyledTableCell>
             <StyledTableCell align="right">
               <Typography variant="button">Delete</Typography>
             </StyledTableCell>
@@ -207,13 +207,13 @@ export default function Inspection({ showAll = true }) {
                 key={inspection.inspectionId}
                 className="rowHighlight"
               >
-                <TableCell>{inspection.inspectionId}</TableCell>
-                <TableCell>{inspection.productId}</TableCell>
-                <TableCell>
+                <TableCell align="center">{inspection.inspectionId}</TableCell>
+                <TableCell align="center">{inspection.productId}</TableCell>
+                <TableCell align="center">
                   {dayjs(inspection.date).locale("en").format("DD MMMM YYYY")}
                 </TableCell>
-                <TableCell>{inspection.homeAddress}</TableCell>
-                <TableCell
+                <TableCell align="center">{inspection.homeAddress}</TableCell>
+                <TableCell align="center"
                 // style={{
                 //   color: inspection.status === "Done" ? "green" : "red",
                 // }}

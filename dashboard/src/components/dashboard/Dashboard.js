@@ -7,16 +7,22 @@ import {
   Grid,
   Paper,
   Typography,
+  IconButton,
 } from "@mui/material";
-import Charts from "./chart/Charts";
+
+import { AppSettingsAltTwoTone as InspectionIcon } from "@mui/icons-material";
+
 import Inspection from "../../pages/Inspection";
-import ProductListing from "../../pages/ProductListing";
 import Title from "../../styles/Title";
 import { Link } from "react-router-dom";
 import { getAllInspectionRequests } from "../../services/inspection";
+import { getAllSellRequests } from "../../services/requsets";
+import { getAllProducts } from "../../services/products";
 
 export default function Dashboard() {
   const [inspectionCount, setInspectionCount] = useState(0);
+  const [requestCount, setRequestCount] = useState(0);
+  const [productCount, setProductCount] = useState(0);
 
   const fetchInspectionRequest = useCallback(async () => {
     try {
@@ -31,6 +37,32 @@ export default function Dashboard() {
     fetchInspectionRequest();
   }, [fetchInspectionRequest]);
 
+  const fetchSellRquest = useCallback(async () => {
+    try {
+      const response = await getAllSellRequests();
+      setRequestCount(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSellRquest();
+  }, [fetchSellRquest]);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await getAllProducts();
+      setProductCount(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
   return (
     <Box
       component="main"
@@ -41,26 +73,13 @@ export default function Dashboard() {
             : theme.palette.grey[900],
         flexGrow: 1,
         height: "100vh",
-        overflow: "auto",
+        overflow: "hidden",
       }}
     >
       <Toolbar />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Grid container spacing={3}>
-          {/* Chart */}
-          <Grid item xs={12} md={8} lg={5}>
-            <Paper
-              sx={{
-                p: 1,
-                display: "flex",
-                flexDirection: "column",
-                height: 240,
-              }}
-            >
-              <Charts />
-            </Paper>
-          </Grid>
-          <Grid item xs={7} sx={{ display: "flex", gap: 2 }}>
+        <Grid container spacing={3} justifyContent={'center'}>
+          <Grid item xs={7} sx={{ display: "flex", gap: 2}}>
             <Paper
               sx={{
                 pt: 4,
@@ -72,16 +91,15 @@ export default function Dashboard() {
                 borderRadius: 5,
               }}
             >
-              <Title>Total Inspections</Title>
+              <Title>Total Products</Title>
               <Typography
                 sx={{
                   textAlign: "center",
                   fontWeight: "medium",
-                  fontSize: 25,
-                  color: "#FF5A60",
+                  fontSize: 20,
                 }}
               >
-                {/* {totalCount} */}
+                {productCount}
               </Typography>
               {/* <Deposits /> */}
             </Paper>
@@ -96,34 +114,47 @@ export default function Dashboard() {
                 borderRadius: 5,
               }}
             >
-              {/* <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{totalCount}</Typography> */}
-            </Paper>
-            <Paper
-              sx={{
-                pt: 4,
-                pl: 2,
-                display: "flex",
-                flexDirection: "column",
-                height: 150,
-                width: 190,
-              }}
-            >
-              <Title>Total Inspections</Title>
+              <Title>Total Sell Request</Title>
               <Typography
                 sx={{
                   textAlign: "center",
                   fontWeight: "medium",
-                  fontSize: 25,
+                  fontSize: 20,
                   color: "black",
                 }}
               >
-                {inspectionCount}
+                {requestCount}
               </Typography>
             </Paper>
+            <IconButton size="small" disableRipple >
+              <Paper
+                sx={{
+                  pt: 4,
+                  pl: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: 150,
+                  width: 190,
+                  borderRadius: 5,
+                }}
+              >
+                <Title>Total Inspections</Title>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    fontWeight: "medium",
+                    fontSize: 20,
+                    color: "black",
+                  }}
+                >
+                  {/* <InspectionIcon sx={{ fill: "#FF5A60" }} /> */}
+                  {inspectionCount}
+                </Typography>
+              </Paper>
+            </IconButton>
           </Grid>
           {/* Recent Inspection */}
-          <Grid item xs={12}>
+          <Grid item xs={15}>
             <Paper
               sx={{
                 p: 1,

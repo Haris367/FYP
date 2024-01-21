@@ -119,8 +119,8 @@ function ProductListing() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <IconButton color="secondary" onClick={handleSearch}>
-              <SearchIcon />
+            <IconButton onClick={handleSearch}>
+              <SearchIcon sx={{ fill: "#FF5A60" }}/>
             </IconButton>
           </Box>
         </div>
@@ -179,10 +179,9 @@ function ProductListing() {
               {/* <StyledTableCell>{productListing.isFeaturedAd}</StyledTableCell> */}
               <StyledTableCell align="right">
                 <IconButton
-                  color="secondary"
                   onClick={() => handleDelete(productListing.productId)}
                 >
-                  <DeleteIcon />
+                  <DeleteIcon sx={{ fill: "#FF5A60" }} />
                 </IconButton>
               </StyledTableCell>
             </StyledTableRow>

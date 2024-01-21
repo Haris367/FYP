@@ -9,14 +9,12 @@ import {
 import {
   // Dashboard as DashboardIcon,
   // DashboardOutlinedIcon as DashboardIcon,
+  DashboardOutlined as DashboardOutlinedIcon,
   AppSettingsAltTwoTone as InspectionIcon,
   SellTwoTone as SellItForMeIcon,
-  BarChart as BarChartIcon,
   Inventory2Outlined as Inventory2OutlinedIcon,
-  Layers as LayersIcon,
-  Assignment as AssignmentIcon
 } from "@mui/icons-material";
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+// import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 
 import { Link } from "react-router-dom";
 // import Charts from "./Charts";
@@ -31,12 +29,12 @@ export const mainListItems = (
     </ListItemButton>
 
     {/* Inspection */}
-    <ListItemButton component={Link} to="/inspection">
-      <ListItemIcon>
-        <InspectionIcon />
-      </ListItemIcon>
-      <ListItemText primary="Inspection" />
-    </ListItemButton>
+      <ListItemButton component={Link} to="/inspection">
+        <ListItemIcon>
+          <InspectionIcon />
+        </ListItemIcon>
+        <ListItemText primary="Inspection" />
+      </ListItemButton>
 
     {/* Product Listing */}
     <ListItemButton component={Link} to="/products" >

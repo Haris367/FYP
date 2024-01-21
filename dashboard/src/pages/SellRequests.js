@@ -77,9 +77,14 @@ function SellRequests() {
 
   const handleDelete = async (SellitForMeID) => {
     try {
-      // Assuming you have a deleteProductById function in your service
-      await deleteSellRequestById(SellitForMeID);
-
+      const shouldDelete = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
+      if (shouldDelete) {
+        // Assuming you have a deleteProductById function in your service
+        await deleteSellRequestById(SellitForMeID);
+        fetchRequests();
+      }
       // After deletion, fetch the updated product list
       fetchRequests();
     } catch (error) {
@@ -103,21 +108,23 @@ function SellRequests() {
   return (
     <Box component="main" sx={{ ml: 9 }}>
       <Toolbar />
-      <div style={{ marginLeft: "auto" }}>
+      <Toolbar>
         <Typography variant="h5" ml={1}>
           Sell Requests
         </Typography>
-        <Box display="flex" alignItems="center">
-          <InputBase
-            placeholder="Search by request Id"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <IconButton color="secondary" onClick={handleSearch}>
-            <SearchIcon />
-          </IconButton>
-        </Box>
-      </div>
+        <div style={{ marginLeft: "auto" }}>
+          <Box display="flex" alignItems="center">
+            <InputBase
+              placeholder="Search by request Id"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <IconButton onClick={handleSearch}>
+              <SearchIcon sx={{ fill: "#FF5A60" }}  />
+            </IconButton>
+          </Box>
+        </div>
+      </Toolbar>
       {/* <Toolbar/> */}
       <Table size="small">
         <TableHead>
@@ -174,10 +181,9 @@ function SellRequests() {
               </StyledTableCell>
               <StyledTableCell align="right">
                 <IconButton
-                  color="secondary"
                   onClick={() => handleDelete(sellRequestt.SellitForMeID)}
                 >
-                  <DeleteIcon />
+                  <DeleteIcon sx={{ fill: "#FF5A60" }} />
                 </IconButton>
               </StyledTableCell>
             </StyledTableRow>
