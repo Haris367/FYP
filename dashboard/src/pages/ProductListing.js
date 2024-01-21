@@ -19,7 +19,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteProductById, getAllProducts } from "../services/products";
 // import styled from "@emotion/styled";
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -31,11 +30,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
@@ -70,9 +69,16 @@ function ProductListing() {
 
   const handleDelete = async (productId) => {
     try {
+      const shouldDelete = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
       // Assuming you have a deleteProductById function in your service
-      await deleteProductById(productId);
-
+      if (shouldDelete) {
+        // If the user confirms deletion
+        await deleteProductById(productId);
+        // After deletion, fetch the updated product list
+        fetchProducts();
+      }
       // After deletion, fetch the updated product list
       fetchProducts();
     } catch (error) {
@@ -81,7 +87,7 @@ function ProductListing() {
   };
 
   return (
-    <Box component='main'>
+    <Box component="main">
       <Toolbar />
       <Typography variant="h4" ml={10}>
         Product Listing
@@ -91,23 +97,23 @@ function ProductListing() {
         <TableHead>
           <TableRow>
             <StyledTableCell align="right">
-              <Typography sx={{font:'bold'}}> Product Id</Typography>
+              <Typography sx={{ font: "bold" }}> Product Id</Typography>
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell align="right">
               <Typography>Name</Typography>
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell align="center">
               <Typography>Description</Typography>
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell align="right">
               <Typography>Price</Typography>
             </StyledTableCell>
             <StyledTableCell align="right">
               <Typography>Quantity</Typography>
             </StyledTableCell>
-            <StyledTableCell align="right">
+            {/* <StyledTableCell align="right">
               <Typography>isFeaturedAd</Typography>
-            </StyledTableCell>
+            </StyledTableCell> */}
             <StyledTableCell align="right">
               <Typography variant="button">Delete</Typography>
             </StyledTableCell>
@@ -122,12 +128,22 @@ function ProductListing() {
             : productListing
           ).map((productListing) => (
             <StyledTableRow key={productListing.productId}>
-              <StyledTableCell align="right">{productListing.productId}</StyledTableCell>
-              <StyledTableCell align="center">{productListing.name}</StyledTableCell>
-              <StyledTableCell>{productListing.description}</StyledTableCell>
-              <StyledTableCell>{productListing.price}</StyledTableCell>
-              <StyledTableCell align="right">{productListing.quantity}</StyledTableCell>
-              <StyledTableCell>{productListing.isFeaturedAd}</StyledTableCell>
+              <StyledTableCell align="right">
+                {productListing.productId}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {productListing.name}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {productListing.description}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+              Rs.{productListing.price.toLocaleString()}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {productListing.quantity}
+              </StyledTableCell>
+              {/* <StyledTableCell>{productListing.isFeaturedAd}</StyledTableCell> */}
               <StyledTableCell align="right">
                 <IconButton
                   color="secondary"
@@ -152,5 +168,6 @@ function ProductListing() {
     </Box>
   );
 }
+
 
 export default ProductListing;

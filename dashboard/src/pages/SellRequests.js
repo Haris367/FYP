@@ -131,6 +131,7 @@ function SellRequests() {
               <StyledTableCell>{sellRequestt.Address}</StyledTableCell>
               <StyledTableCell align="right">{sellRequestt.mobileDescription}</StyledTableCell>
               <StyledTableCell>{sellRequestt.inspectionSlot}</StyledTableCell>
+              <StyledTableCell>{sellRequestt.inspectionTime}</StyledTableCell>
               <StyledTableCell align="right">
                 <IconButton
                   color="secondary"

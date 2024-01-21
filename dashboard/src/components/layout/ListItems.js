@@ -12,6 +12,7 @@ import {
   AppSettingsAltTwoTone as InspectionIcon,
   SellTwoTone as SellItForMeIcon,
   BarChart as BarChartIcon,
+  Inventory2Outlined as Inventory2OutlinedIcon,
   Layers as LayersIcon,
   Assignment as AssignmentIcon
 } from "@mui/icons-material";
@@ -40,7 +41,7 @@ export const mainListItems = (
     {/* Product Listing */}
     <ListItemButton component={Link} to="/products" >
       <ListItemIcon>
-        <BarChartIcon />
+        <Inventory2OutlinedIcon />
       </ListItemIcon>
       <ListItemText primary="Product Listing" />
     </ListItemButton>

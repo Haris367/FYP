@@ -52,6 +52,7 @@ export default function Dashboard() {
                 flexDirection: "column",
                 height: 150,
                 width: 190,
+                borderRadius: 5,
               }}
             >
               <Title>Total Inspections</Title>
@@ -75,6 +76,7 @@ export default function Dashboard() {
                 flexDirection: "column",
                 height: 150,
                 width: 190,
+                borderRadius: 5,
               }}
             >
               {/* <Title>Total Inspections</Title>
@@ -96,7 +98,7 @@ export default function Dashboard() {
           </Grid>
           {/* Recent Inspection */}
           <Grid item xs={12}>
-            <Paper sx={{ p: 1, display: "flex", flexDirection: "column" }}>
+            <Paper sx={{ p: 1, display: "flex", flexDirection: "column", borderRadius: 5}}>
               <Title>Recent Inspections</Title>
               <Inspection showAll={false} sx={{ width: "1401.6px" }} />
               <Link
