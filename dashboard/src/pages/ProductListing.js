@@ -12,12 +12,19 @@ import {
   Box,
   tableCellClasses,
   styled,
+  InputBase,
 } from "@mui/material";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
 
-import { deleteProductById, getAllProducts } from "../services/products";
-// import styled from "@emotion/styled";
+import {
+  deleteProductById,
+  getAllProducts,
+  getProductById,
+} from "../services/products";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,6 +50,7 @@ function ProductListing() {
   const [productListing, setProductListing] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // You can set the number of rows per page
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -86,29 +94,54 @@ function ProductListing() {
     }
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await getProductById(searchQuery);
+      console.log(response.data);
+      // Update the productListing state with the search result
+      setProductListing([response.data]);
+    } catch (error) {
+      console.log(error);
+      alert("Searched Product Not found");
+      // Handle error, e.g., show a message to the user
+    }
+  };
+
   return (
-    <Box component="main">
+    <Box component="main" sx={{ ml: 9 }}>
       <Toolbar />
-      <Typography variant="h4" ml={10}>
-        Product Listing
-      </Typography>
-      <Toolbar />
-      <Table size="small">
+      <Toolbar>
+        <Typography variant="h5">All Products</Typography>
+        <div style={{ marginLeft: "auto" }}>
+          <Box display="flex" alignItems="center">
+            <InputBase
+              placeholder="Search by Product Id"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <IconButton color="secondary" onClick={handleSearch}>
+              <SearchIcon />
+            </IconButton>
+          </Box>
+        </div>
+      </Toolbar>
+      {/* <Toolbar/> */}
+      <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="right">
+            <StyledTableCell align="left">
               <Typography sx={{ font: "bold" }}> Product Id</Typography>
             </StyledTableCell>
-            <StyledTableCell align="right">
-              <Typography>Name</Typography>
+            <StyledTableCell align="center">
+              <Typography> Model Name</Typography>
             </StyledTableCell>
             <StyledTableCell align="center">
               <Typography>Description</Typography>
             </StyledTableCell>
-            <StyledTableCell align="right">
+            <StyledTableCell align="center">
               <Typography>Price</Typography>
             </StyledTableCell>
-            <StyledTableCell align="right">
+            <StyledTableCell align="center">
               <Typography>Quantity</Typography>
             </StyledTableCell>
             {/* <StyledTableCell align="right">
@@ -128,19 +161,19 @@ function ProductListing() {
             : productListing
           ).map((productListing) => (
             <StyledTableRow key={productListing.productId}>
-              <StyledTableCell align="right">
+              <StyledTableCell align="left">
                 {productListing.productId}
               </StyledTableCell>
-              <StyledTableCell align="right">
-                {productListing.name}
+              <StyledTableCell align="center">
+                {productListing.modelName}
               </StyledTableCell>
               <StyledTableCell align="center">
                 {productListing.description}
               </StyledTableCell>
-              <StyledTableCell align="right">
-              Rs.{productListing.price.toLocaleString()}
+              <StyledTableCell align="center">
+                Rs.{productListing.price.toLocaleString()}
               </StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="center">
                 {productListing.quantity}
               </StyledTableCell>
               {/* <StyledTableCell>{productListing.isFeaturedAd}</StyledTableCell> */}
@@ -168,6 +201,5 @@ function ProductListing() {
     </Box>
   );
 }
-
 
 export default ProductListing;

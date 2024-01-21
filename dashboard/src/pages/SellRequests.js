@@ -12,12 +12,19 @@ import {
   Box,
   tableCellClasses,
   styled,
+  InputBase,
 } from "@mui/material";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
 
-import { deleteSellRequestById, getAllSellRequests } from "../services/requsets";
-
+import {
+  deleteSellRequestById,
+  getAllSellRequests,
+  getSellRequestById,
+} from "../services/requsets";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,11 +37,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
@@ -43,6 +50,7 @@ function SellRequests() {
   const [sellRequestt, setSellRequests] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // You can set the number of rows per page
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,38 +87,50 @@ function SellRequests() {
     }
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await getSellRequestById(searchQuery);
+      console.log(response.data);
+      // Update the productListing state with the search result
+      setSellRequests([response.data]);
+    } catch (error) {
+      console.log(error);
+      alert("Searched request Not found");
+      // Handle error, e.g., show a message to the user
+    }
+  };
+
   return (
-    <Box component='main'>
+    <Box component="main" sx={{ ml: 9 }}>
       <Toolbar />
-      <Typography variant="h4" ml={10}>Sell For me</Typography>
-      <Toolbar />
+      <div style={{ marginLeft: "auto" }}>
+        <Typography variant="h5" ml={1}>
+          Sell Requests
+        </Typography>
+        <Box display="flex" alignItems="center">
+          <InputBase
+            placeholder="Search by request Id"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <IconButton color="secondary" onClick={handleSearch}>
+            <SearchIcon />
+          </IconButton>
+        </Box>
+      </div>
+      {/* <Toolbar/> */}
       <Table size="small">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="right">
-              Request Id
-            </StyledTableCell>
-            <StyledTableCell align="center">
-              User Name
-            </StyledTableCell>
-            <StyledTableCell>
-              Phone Number
-            </StyledTableCell>
-            <StyledTableCell>
-              Address
-            </StyledTableCell>
-            <StyledTableCell>
-             Model Name
-            </StyledTableCell>
-            <StyledTableCell align="right">
-              Mobile Description
-            </StyledTableCell>
-            <StyledTableCell align="right">
-              Inspection Slot
-            </StyledTableCell>
-            <StyledTableCell align="right">
-              Inspection Time
-            </StyledTableCell>
+            <StyledTableCell align="center">Request Id</StyledTableCell>
+            <StyledTableCell align="right">User Name</StyledTableCell>
+            <StyledTableCell align="center">Email</StyledTableCell>
+            <StyledTableCell align="center">Phone Number</StyledTableCell>
+            <StyledTableCell align="center">Address</StyledTableCell>
+            <StyledTableCell align="center">Model Name</StyledTableCell>
+            <StyledTableCell align="right">Mobile Description</StyledTableCell>
+            <StyledTableCell align="right">Inspection Slot</StyledTableCell>
+            <StyledTableCell align="right">Inspection Time</StyledTableCell>
             <StyledTableCell align="right">
               <Typography variant="button">Delete</Typography>
             </StyledTableCell>
@@ -125,13 +145,33 @@ function SellRequests() {
             : sellRequestt
           ).map((sellRequestt) => (
             <StyledTableRow key={sellRequestt.SellitForMeID}>
-              <StyledTableCell align="right">{sellRequestt.SellitForMeID}</StyledTableCell>
-              <StyledTableCell align="center">{sellRequestt.name}</StyledTableCell>
-              <StyledTableCell>{sellRequestt.phoneNumber}</StyledTableCell>
-              <StyledTableCell>{sellRequestt.Address}</StyledTableCell>
-              <StyledTableCell align="right">{sellRequestt.mobileDescription}</StyledTableCell>
-              <StyledTableCell>{sellRequestt.inspectionSlot}</StyledTableCell>
-              <StyledTableCell>{sellRequestt.inspectionTime}</StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.SellitForMeID}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.userName}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.emailAddress}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.phoneNumber}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.address}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.modelName}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.mobileDescription}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.inspectionSlot}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {sellRequestt.inspectionTime}
+              </StyledTableCell>
               <StyledTableCell align="right">
                 <IconButton
                   color="secondary"

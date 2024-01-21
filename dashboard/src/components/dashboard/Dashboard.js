@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+
 import {
   Box,
   Toolbar,
@@ -9,11 +10,27 @@ import {
 } from "@mui/material";
 import Charts from "./chart/Charts";
 import Inspection from "../../pages/Inspection";
+import ProductListing from "../../pages/ProductListing";
 import Title from "../../styles/Title";
 import { Link } from "react-router-dom";
-import { getRow } from "../../pages/Inspection";
+import { getAllInspectionRequests } from "../../services/inspection";
 
 export default function Dashboard() {
+  const [inspectionCount, setInspectionCount] = useState(0);
+
+  const fetchInspectionRequest = useCallback(async () => {
+    try {
+      const response = await getAllInspectionRequests();
+      setInspectionCount(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInspectionRequest();
+  }, [fetchInspectionRequest]);
+
   return (
     <Box
       component="main"
@@ -93,12 +110,28 @@ export default function Dashboard() {
               }}
             >
               <Title>Total Inspections</Title>
-              <Typography sx={{textAlign: 'center' ,fontWeight: 'medium', fontSize: 25,color:"#2ecc71"}}>{}</Typography>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "medium",
+                  fontSize: 25,
+                  color: "black",
+                }}
+              >
+                {inspectionCount}
+              </Typography>
             </Paper>
           </Grid>
           {/* Recent Inspection */}
           <Grid item xs={12}>
-            <Paper sx={{ p: 1, display: "flex", flexDirection: "column", borderRadius: 5}}>
+            <Paper
+              sx={{
+                p: 1,
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: 5,
+              }}
+            >
               <Title>Recent Inspections</Title>
               <Inspection showAll={false} sx={{ width: "1401.6px" }} />
               <Link
