@@ -106,8 +106,6 @@ export default function Login() {
               helperText={formik.touched.email && formik.errors.email}
               error={formik.touched.email && Boolean(formik.errors.email)}
               InputProps={{ disableUnderline: true }}
-              // onChange={(e) => setUsername(e.target.value)}
-              // error={isUsernameInvalid} // Use the 'error' prop
             />
             <TextField
               margin="normal"
