@@ -84,6 +84,7 @@ function ProductListing() {
       if (shouldDelete) {
         // If the user confirms deletion
         await deleteProductById(productId);
+        console.log("Product deleted");
         // After deletion, fetch the updated product list
         fetchProducts();
       }
@@ -101,8 +102,8 @@ function ProductListing() {
       // Update the productListing state with the search result
       setProductListing([response.data]);
     } catch (error) {
-      console.log(error);
       alert("Searched Product Not found");
+      console.log("Product not found",error);
       // Handle error, e.g., show a message to the user
     }
   };
@@ -120,7 +121,7 @@ function ProductListing() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <IconButton onClick={handleSearch}>
-              <SearchIcon sx={{ fill: "#FF5A60" }}/>
+              <SearchIcon sx={{ fill: "#FF5A60" }} />
             </IconButton>
           </Box>
         </div>

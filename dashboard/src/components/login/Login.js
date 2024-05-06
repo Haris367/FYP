@@ -52,6 +52,7 @@ export default function Login() {
         navigate("/dashboard");
       } catch (e) {
         console.log(e?.response?.data || e.response?.data?.message);
+        alert("User Doesn't Exist");
         if (e.response?.status === 401) {
           formik.errors.email = "Invalid email or password";
           formik.errors.password = "Invalid email or password";
