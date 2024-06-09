@@ -121,7 +121,7 @@ export default function Inspection({ showAll = true }) {
   };
 
   const handleSearch = async () => {
-    try {
+    try { 
       const response = await getInspectionRequestById(searchQuery);
       console.log(response.data);
       // Update the productListing state with the search result
